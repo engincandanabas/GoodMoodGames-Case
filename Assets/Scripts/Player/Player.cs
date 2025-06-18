@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     [Header("Core")]
     [SerializeField] private Transform mainCamera;
+    [SerializeField] private Transform playerModel;
 
     [Header("Animation")]
     [SerializeField] private Animator animator;
@@ -29,6 +30,10 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
+        animator.SetBool("isRunning", true);
+        playerModel.transform.localPosition = Vector3.zero;
+        playerModel.transform.localRotation = Quaternion.identity;
+
         var inputDirection=input.action.ReadValue<Vector2>();
         moveDirection= new Vector3(inputDirection.x, 0f, inputDirection.y).normalized;
 
@@ -42,6 +47,14 @@ public class Player : MonoBehaviour
             Vector3 finalMove = moveDir.normalized * movementSpeed;
 
             characterController.Move(finalMove * Time.deltaTime);
+        }
+        else
+        {
+            if (animator.GetBool("isRunning"))
+            {
+                animator.SetBool("isRunning", false);
+                isIdle = true;
+            }
         }
     }
 
