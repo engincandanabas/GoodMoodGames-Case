@@ -13,49 +13,46 @@ public class Player : MonoBehaviour
 
     [Header("Core")]
     [SerializeField] private Transform mainCamera;
-    [SerializeField] private Transform playerModel;
-
-    [Header("Animation")]
-    [SerializeField] private Animator animator;
+    private Animator animator;
 
     [Header("Movement")]
-    [SerializeField] private CharacterController characterController;
+    
     [SerializeField] private InputActionReference moveInput;
     [SerializeField] private float movementSpeed = 6f;
     [SerializeField] private float turnSmoothTime = 0.1f;
     [SerializeField] private float turnSmoothVelocity;
+    private CharacterController characterController;
     private Vector3 moveDirection;
 
 
     [Header("Attack")]
     [SerializeField] private InputActionReference attackInput;
     [SerializeField] private int attackDamage = 10;
-    [SerializeField] private LayerMask attackableLayer;
-    [SerializeField] private BoxCollider axeCollider;
+    [SerializeField] private BoxCollider swordCollider;
     private int comboStep = 0;
     private bool comboQueued = false;
 
-
-
+    
+    
     private bool isAttacking = false;
     private bool canAttack = true;
     private bool isIdle = true;
 
     private void Start()
     {
-        axeCollider.enabled = false;
+        animator = GetComponent<Animator>();
+        characterController = GetComponent<CharacterController>();
+        swordCollider.enabled = false;
     }
     private void OnEnable()
     {
         attackInput.action.started += Attack;
-        AnimationController.OnAttackAnimationEnd += EndAttack;
         ComboAttack += Player_ComboAttack;
         ComboReset += Player_ComboReset;
     }
     private void OnDisable()
     {
         attackInput.action.started -= Attack;
-        AnimationController.OnAttackAnimationEnd -= EndAttack;
         ComboAttack -= Player_ComboAttack;
         ComboReset -= Player_ComboReset;
     }
@@ -69,8 +66,6 @@ public class Player : MonoBehaviour
         if (isAttacking) return;
 
         animator.SetBool("isRunning", true);
-        playerModel.transform.localPosition = Vector3.zero;
-        playerModel.transform.localRotation = Quaternion.identity;
 
         var inputDirection= moveInput.action.ReadValue<Vector2>();
         moveDirection= new Vector3(inputDirection.x, 0f, inputDirection.y).normalized;
@@ -103,7 +98,7 @@ public class Player : MonoBehaviour
         if (!isAttacking && canAttack)
         {
             //first attack
-            axeCollider.enabled = true;
+            swordCollider.enabled = true;
             comboStep = 1;
             isAttacking = true;
             canAttack = false;
@@ -129,7 +124,7 @@ public class Player : MonoBehaviour
     }
     private void Player_ComboAttack(object sender, ComboAttackEventArgs args)
     {
-        axeCollider.enabled = true;
+        swordCollider.enabled = true;
         Debug.Log("Combo" + comboStep);
         comboStep++;
         animator.SetTrigger("Attack" + comboStep);
@@ -137,7 +132,7 @@ public class Player : MonoBehaviour
     }
     private void Player_ComboReset(object sender, EventArgs args)
     {
-        axeCollider.enabled = false;
+        swordCollider.enabled = false;
         animator.SetBool("isCombo", false);
         comboStep = 0;
         isAttacking = false;

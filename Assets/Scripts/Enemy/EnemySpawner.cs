@@ -32,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
     }
     private IEnumerator Spawn()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(5);
         var enemy = Instantiate(enemyPrefab, spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Count)]);
     }
 

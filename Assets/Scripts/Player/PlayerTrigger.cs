@@ -12,6 +12,7 @@ public class PlayerTrigger : MonoBehaviour
         {
             damageable.TakeDamage(attackDamage);
         }
+        this.GetComponent<BoxCollider>().enabled = false;
     }
     private void OnEnable()
     {
