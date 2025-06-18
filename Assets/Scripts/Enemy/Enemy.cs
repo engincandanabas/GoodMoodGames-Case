@@ -1,17 +1,20 @@
+using System;
 using UnityEngine;
+using static Player;
 
 public class Enemy : MonoBehaviour,IDamageable
 {
     [Header("Core")]
     [SerializeField] private int health = 100;
 
+    
     private BoxCollider boxCollider;
 
     private void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
     }
-
+    
 
     public void TakeDamage(int damage)
     {
@@ -23,4 +26,5 @@ public class Enemy : MonoBehaviour,IDamageable
             EnemySpawner.Instance.SpawnEnemy();
         }
     }
+    
 }

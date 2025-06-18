@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Player;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class EnemySpawner : MonoBehaviour
     [Header("Core")]
     [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private Transform enemyPrefab;
+
+    
 
     private void Awake()
     {
@@ -21,7 +25,7 @@ public class EnemySpawner : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
+    
     public void SpawnEnemy()
     {
         StartCoroutine(Spawn());
@@ -29,6 +33,7 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator Spawn()
     {
         yield return new WaitForSeconds(3);
-        var enemy = Instantiate(enemyPrefab, spawnPoints[Random.Range(0, spawnPoints.Count)]);
+        var enemy = Instantiate(enemyPrefab, spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Count)]);
     }
+
 }

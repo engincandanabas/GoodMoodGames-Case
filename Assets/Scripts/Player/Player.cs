@@ -1,8 +1,16 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    public static EventHandler<ComboAttackEventArgs> ComboAttack;
+    public static EventHandler ComboReset;
+    public class ComboAttackEventArgs : EventArgs
+    {
+        public int damage;
+    }
+
     [Header("Core")]
     [SerializeField] private Transform mainCamera;
     [SerializeField] private Transform playerModel;
@@ -41,11 +49,15 @@ public class Player : MonoBehaviour
     {
         attackInput.action.started += Attack;
         AnimationController.OnAttackAnimationEnd += EndAttack;
+        ComboAttack += Player_ComboAttack;
+        ComboReset += Player_ComboReset;
     }
     private void OnDisable()
     {
         attackInput.action.started -= Attack;
         AnimationController.OnAttackAnimationEnd -= EndAttack;
+        ComboAttack -= Player_ComboAttack;
+        ComboReset -= Player_ComboReset;
     }
     private void Update()
     {
@@ -90,6 +102,7 @@ public class Player : MonoBehaviour
     {
         if (!isAttacking && canAttack)
         {
+            //first attack
             axeCollider.enabled = true;
             comboStep = 1;
             isAttacking = true;
@@ -107,20 +120,28 @@ public class Player : MonoBehaviour
     {
         if (comboQueued && comboStep < 3)
         {
-            axeCollider.enabled = true;
-            Debug.Log("Combo"+comboStep);
-            comboStep++;
-            animator.SetTrigger("Attack" + comboStep);
-            comboQueued = false;
+            ComboAttack?.Invoke(this, new ComboAttackEventArgs { damage = attackDamage * comboStep });
         }
         else
         {
-            axeCollider.enabled = false;
-            animator.SetBool("isCombo", false);
-            comboStep = 0;
-            isAttacking = false;
-            canAttack = true;
-            comboQueued = false;
+            ComboReset?.Invoke(this,null);
         }
+    }
+    private void Player_ComboAttack(object sender, ComboAttackEventArgs args)
+    {
+        axeCollider.enabled = true;
+        Debug.Log("Combo" + comboStep);
+        comboStep++;
+        animator.SetTrigger("Attack" + comboStep);
+        comboQueued = false;
+    }
+    private void Player_ComboReset(object sender, EventArgs args)
+    {
+        axeCollider.enabled = false;
+        animator.SetBool("isCombo", false);
+        comboStep = 0;
+        isAttacking = false;
+        canAttack = true;
+        comboQueued = false;
     }
 }
