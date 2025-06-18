@@ -364,7 +364,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8973146141492562344, guid: f9d6a48488034e14f848e989e667164d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1502741603}
   m_SourcePrefab: {fileID: 100100000, guid: f9d6a48488034e14f848e989e667164d, type: 3}
 --- !u!4 &883981673 stripped
 Transform:
@@ -1530,6 +1533,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1502741602 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8973146141492562344, guid: f9d6a48488034e14f848e989e667164d, type: 3}
+  m_PrefabInstance: {fileID: 883981672}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1502741603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502741602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b2a62392135714a8f38a6f48368f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1743475524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1810,10 +1830,15 @@ MonoBehaviour:
   playerModel: {fileID: 883981673}
   animator: {fileID: 883981674}
   characterController: {fileID: 1996734339}
-  input: {fileID: 6336487010030275132, guid: 95ef4040f5b5c5f47a340918ec1e0c3a, type: 3}
+  moveInput: {fileID: 6336487010030275132, guid: 95ef4040f5b5c5f47a340918ec1e0c3a, type: 3}
   movementSpeed: 6
   turnSmoothTime: 0.1
   turnSmoothVelocity: 0
+  attackInput: {fileID: -4132382577629168708, guid: 95ef4040f5b5c5f47a340918ec1e0c3a, type: 3}
+  attackDamage: 10
+  attackableLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!143 &1996734339
 CharacterController:
   m_ObjectHideFlags: 0
