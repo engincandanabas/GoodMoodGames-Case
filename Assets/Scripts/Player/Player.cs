@@ -97,8 +97,8 @@ public class Player : MonoBehaviour
     {
         if (!isAttacking && canAttack)
         {
-            AudioManager.Instance.PlaySfx("Attack");
             //first attack
+            swordCollider.enabled = true;
             comboStep = 1;
             isAttacking = true;
             canAttack = false;
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
     }
     private void Player_ComboAttack(object sender, ComboAttackEventArgs args)
     {
-        AudioManager.Instance.PlaySfx("Attack");
+        swordCollider.enabled = true;
         Debug.Log("Combo" + comboStep);
         comboStep++;
         animator.SetTrigger("Attack" + comboStep);
@@ -138,13 +138,5 @@ public class Player : MonoBehaviour
         isAttacking = false;
         canAttack = true;
         comboQueued = false;
-    }
-    public void DisableCollider()
-    {
-        swordCollider.enabled = false;
-    }
-    public void EnableCollider()
-    {
-        swordCollider.enabled = true;
     }
 }
