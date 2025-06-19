@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
         DOTween.Kill(healthImage);
         healthImage.DOFillAmount((float)health / (float)maxHealth, 0.2f);
+        AudioManager.Instance.PlaySfx("Death");
 
         if (health <= 0)
         {

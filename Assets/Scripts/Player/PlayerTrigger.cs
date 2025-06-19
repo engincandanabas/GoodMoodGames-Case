@@ -13,7 +13,13 @@ public class PlayerTrigger : MonoBehaviour
         {
             damageable.TakeDamage(attackDamage);
 
+
+            PopUpSpawner.Instance.GetPopUp(other.transform.position+
+                new Vector3(UnityEngine.Random.Range(-1,1),UnityEngine.Random.Range(0.5f,1.1f),0),
+                attackDamage);
+
             StartCoroutine(CameraController_ShakeCamera());
+            AudioManager.Instance.PlaySfx("Damage");
         }
         this.GetComponent<BoxCollider>().enabled = false;
         
