@@ -1,17 +1,22 @@
 using UnityEngine;
-
+using DG.Tweening;
+using UnityEngine.UI;
 public class Enemy : MonoBehaviour, IDamageable
 {
     [Header("Core")]
     [SerializeField] private int health = 100;
     [SerializeField] private float damageCooldown = 0.3f;
+    [SerializeField] private Image healthImage;
 
     private Animator animator;
     private BoxCollider boxCollider;
     private bool isTakingDamage = false;
 
+    private int maxHealth;
+
     private void Start()
     {
+        maxHealth = health;
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider>();
     }
@@ -20,8 +25,12 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if (isTakingDamage) return;
 
+
         isTakingDamage = true;
         health -= damage;
+
+        DOTween.Kill(healthImage);
+        healthImage.DOFillAmount((float)health / (float)maxHealth, 0.2f);
 
         if (health <= 0)
         {

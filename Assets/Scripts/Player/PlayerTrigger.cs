@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using static Player;
 
@@ -11,8 +12,11 @@ public class PlayerTrigger : MonoBehaviour
         if (damageable != null)
         {
             damageable.TakeDamage(attackDamage);
+
+            StartCoroutine(CameraController_ShakeCamera());
         }
         this.GetComponent<BoxCollider>().enabled = false;
+        
     }
     private void OnEnable()
     {
@@ -31,6 +35,11 @@ public class PlayerTrigger : MonoBehaviour
     private void Player_ComboReset(object sender, EventArgs args)
     {
         attackDamage = 10;
+    }
+    private IEnumerator CameraController_ShakeCamera()
+    {
+        yield return new WaitForSeconds(0.3f);
+        CameraController.Instance.ShakeCamera();
     }
 }
 

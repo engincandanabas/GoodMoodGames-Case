@@ -854,7 +854,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2867289f5c9d2a248ba2235799200835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 50
+  damageCooldown: 0.3
+  healthImage: {fileID: 2626502210190035774}
 --- !u!65 &3450666540737056302
 BoxCollider:
   m_ObjectHideFlags: 0

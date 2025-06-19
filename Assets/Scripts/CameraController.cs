@@ -5,6 +5,8 @@ using System;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController Instance { get; private set; }
+
     [Header("Type")]
     [SerializeField] private CameraType cameraType;
 
@@ -18,9 +20,27 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float smoothTime = 0.2f;
     private float currentYawVelocity;
 
+    [Header("Shake Settings")]
+    [SerializeField] private float shakeIntensity;
+    [SerializeField] private float shakeTime;
+
+    private float shakerTime;
+    private float shakerTimeTotal;
+    private float startingIntensity;
+
 
     private CinemachineOrbitalFollow orbitalFollow;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {
@@ -30,15 +50,15 @@ public class CameraController : MonoBehaviour
     {
         input.action.started += ChangeCameraType;
     }
-
-    
-
     private void OnDisable()
     {
-        
+        input.action.started -= ChangeCameraType;
     }
+
     void Update()
     {
+
+        ShakeControl();
         LockOnCamera();
     }
     private void ChangeCameraType(InputAction.CallbackContext context)
@@ -88,6 +108,27 @@ public class CameraController : MonoBehaviour
         }
 
         return closest;
+    }
+    public void ShakeCamera()
+    {
+        CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin = cinemachineCamera.GetComponent<CinemachineBasicMultiChannelPerlin>();
+        cinemachineBasicMultiChannelPerlin.AmplitudeGain = shakeIntensity;
+        cinemachineBasicMultiChannelPerlin.FrequencyGain = shakeIntensity;
+
+        startingIntensity = shakeIntensity;
+        shakerTimeTotal = shakeTime;
+        shakerTime = shakeTime;
+    }
+    private void ShakeControl()
+    {
+        if (shakerTime > 0)
+        {
+            shakerTime -= Time.deltaTime;
+
+            CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin = cinemachineCamera.GetComponent<CinemachineBasicMultiChannelPerlin>();
+            cinemachineBasicMultiChannelPerlin.AmplitudeGain = Mathf.Lerp(startingIntensity, 0f, 1f - (shakerTime / shakerTimeTotal));
+            cinemachineBasicMultiChannelPerlin.FrequencyGain = Mathf.Lerp(shakerTime, 0f, 1f - (shakerTime / shakerTimeTotal));
+        }
     }
 }
 public enum CameraType
